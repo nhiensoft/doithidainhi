@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
   Camera,
+  Globe,
   Landmark,
   MapPin,
+  PlayCircle,
   ScrollText,
 } from 'lucide-react'
 
@@ -533,10 +535,134 @@ function App() {
         </div>
       </section>
 
-      <footer className="border-t bg-slate-900/95 py-8 text-white">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 text-sm text-white/75 sm:flex-row">
-          <p>© {new Date().getFullYear()} Ninh Bình Explorer</p>
-          <p>React + shadcn/ui + Tailwind CSS</p>
+      <footer className="bg-slate-950 text-white">
+        {/* Gradient top accent */}
+        <div className="h-0.5 bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-400" />
+
+        {/* Stats row */}
+        <div className="border-b border-white/10 bg-white/[0.02]">
+          <div className="container mx-auto grid grid-cols-2 px-4 py-5 md:grid-cols-4">
+            {[
+              { value: '1', label: 'Di sản UNESCO', color: 'text-emerald-400' },
+              { value: '6', label: 'Điểm du lịch tiêu biểu', color: 'text-amber-400' },
+              { value: '1.000+', label: 'Năm lịch sử', color: 'text-sky-400' },
+              { value: '6', label: 'Đặc sản địa phương', color: 'text-violet-400' },
+            ].map((stat) => (
+              <div key={stat.label} className="border-r border-white/10 px-4 py-2 text-center last:border-r-0">
+                <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                <p className="mt-0.5 text-xs text-white/45">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main footer content */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
+            {/* Brand */}
+            <div className="lg:col-span-4">
+              <div className="mb-4 flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" />
+                <span className="text-lg font-bold tracking-wide">Ninh Bình Explorer</span>
+              </div>
+              <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
+                Khám phá vẻ đẹp của vùng đất cố đô — nơi lịch sử ngàn năm, thiên nhiên hùng vĩ và văn hóa đặc sắc hội tụ giữa lòng miền Bắc Việt Nam.
+              </p>
+              <div className="flex gap-2.5">
+                <a
+                  href="https://youtu.be/Gvu5Bqi5Mqc?si=dUdi813aq2BckMN2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/55 transition hover:border-red-400 hover:text-red-400"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                </a>
+                <a
+                  href="https://disansong.lovable.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Website"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/55 transition hover:border-emerald-400 hover:text-emerald-400"
+                >
+                  <Globe className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="lg:col-span-2">
+              <h3 className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-white/35">
+                Khám phá
+              </h3>
+              <ul className="space-y-2.5">
+                {navItems.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      className="text-sm text-white/55 transition hover:text-white"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Destinations */}
+            <div className="lg:col-span-3">
+              <h3 className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-white/35">
+                Điểm đến
+              </h3>
+              <ul className="space-y-2.5">
+                {tours.map((tour) => (
+                  <li key={tour.name}>
+                    <a
+                      href={tour.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-white/55 transition hover:text-white"
+                    >
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                      {tour.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Info */}
+            <div className="lg:col-span-3">
+              <h3 className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-white/35">
+                Thông tin
+              </h3>
+              <ul className="space-y-3.5">
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <span className="text-sm text-white/55">Tỉnh Ninh Bình, Việt Nam</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Globe className="mt-0.5 h-4 w-4 shrink-0 text-sky-400" />
+                  <span className="text-sm text-white/55">Cách Hà Nội khoảng 90 km</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Landmark className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+                  <span className="text-sm text-white/55">Di sản UNESCO Tràng An (2014)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:flex-row">
+            <p className="text-xs text-white/30">
+              © {new Date().getFullYear()} Ninh Bình Explorer · Dự án phi thương mại
+            </p>
+            <div className="flex items-center gap-2 text-xs text-white/30">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span>React · shadcn/ui · Tailwind CSS</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
