@@ -403,25 +403,41 @@ function App() {
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {timeline.map((item) => (
-              <Card key={item.year + item.title} className="border-slate-200 bg-white/80 shadow-sm backdrop-blur-sm">
-                <CardHeader className="pb-2">
-                  <Badge className="w-fit bg-sky-50 text-sky-700 hover:bg-sky-100">{item.year}</Badge>
-                  <CardTitle className="mt-2 text-lg">
+              <div
+                key={item.year + item.title}
+                className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                {item.image && (
+                  <div className="relative h-44 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    <span className="absolute bottom-3 left-3 rounded-full bg-white/20 px-3 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
+                      {item.year}
+                    </span>
+                  </div>
+                )}
+                <div className="p-4">
+                  {!item.image && (
+                    <Badge className="mb-2 w-fit bg-sky-50 text-sky-700 hover:bg-sky-100">{item.year}</Badge>
+                  )}
+                  <h3 className="mb-2 text-base font-bold text-slate-800">
                     {item.url ? (
-                      <a href={item.url} className="text-emerald-700 underline underline-offset-2 hover:text-emerald-800">
+                      <a href={item.url} className="text-emerald-700 hover:text-emerald-900 hover:underline underline-offset-2">
                         {item.title}
                       </a>
                     ) : (
                       item.title
                     )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm leading-relaxed text-slate-600">{item.desc}</p>
-                </CardContent>
-              </Card>
+                  </h3>
+                  <p className="text-sm leading-relaxed text-slate-500">{item.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
