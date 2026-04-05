@@ -156,7 +156,7 @@ const tours = [
     category: 'Lịch sử',
     duration: '2 giờ',
     image: '/images/7adf1d3c-f80e-4a90-a680-926313bca662.png',
-    url: hoaLuWikiUrl,
+    url: 'https://share.google/3Qgm5kNccVNhk4ACn',
   },
   {
     name: 'Chùa Bái Đính',
