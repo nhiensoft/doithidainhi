@@ -162,7 +162,7 @@ const tours = [
     category: 'Tâm linh',
     duration: '3 giờ',
     image: '/images/31e2e0ce-0e39-4a82-abee-8d31a17722a9.png',
-    url: null,
+    url: 'https://share.google/rCMrmdHW3ZT3FYhiU',
   },
   {
     name: 'VQG Cúc Phương',
