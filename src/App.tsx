@@ -17,7 +17,6 @@ const navItems = [
   { id: 'tourism', label: 'Du lịch' },
 ]
 
-const hoaLuWikiUrl = 'https://vi.wikipedia.org/wiki/C%E1%BB%91_%C4%91%C3%B4_Hoa_L%C6%B0'
 
 const stats = [
   {
