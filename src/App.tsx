@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -8,6 +9,7 @@ import {
   MapPin,
   PlayCircle,
   ScrollText,
+  X,
 } from 'lucide-react'
 
 const navItems = [
@@ -37,24 +39,28 @@ const timeline = [
     title: 'Kinh đô Hoa Lư',
     desc: 'Đinh Bộ Lĩnh thống nhất đất nước, lập nước Đại Cồ Việt, chọn Hoa Lư làm kinh đô.',
     url: 'https://vnexpress.net/dinh-bo-linh-hoang-de-dau-tien-cua-nuoc-dai-co-viet-3748828.html',
+    image: '/images/kinh-do-hoa-lu.png',
   },
   {
     year: '980',
     title: 'Nhà Tiền Lê',
     desc: 'Lê Hoàn tiếp nối vai trò trung tâm chính trị của vùng đất Hoa Lư.',
     url: 'https://truyenhinhthanhhoa.vn/nha-nuoc-dai-co-viet-duoi-trieu-tien-le-1808116993.htm',
+    image: '/images/nha-tien-le.png',
   },
   {
     year: '1010',
     title: 'Dời đô ra Thăng Long',
     desc: 'Hoa Lư chuyển thành cố đô, tiếp tục lưu giữ giá trị lịch sử và tín ngưỡng.',
     url: 'https://hoangthanhthanglong.vn/doi-do-quyet-dinh-lich-su/',
+    image: '/images/thang-long.png',
   },
   {
     year: 'Hiện đại',
     title: 'Di sản sống',
     desc: 'Ninh Bình trở thành trung tâm du lịch quốc gia gắn với bảo tồn bản sắc.',
     url: 'https://disansong.lovable.app/',
+    image: '/images/ninh-binh.png',
   },
 ]
 
@@ -183,20 +189,94 @@ const tours = [
 ]
 
 function App() {
+  const [videoOpen, setVideoOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 30)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (!videoOpen) return
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setVideoOpen(false)
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [videoOpen])
+
+  useEffect(() => {
+    if (videoOpen) {
+      document.body.style.overflow = 'hidden'
+      videoRef.current?.play()
+    } else {
+      document.body.style.overflow = ''
+      if (videoRef.current) {
+        videoRef.current.pause()
+        videoRef.current.currentTime = 0
+      }
+    }
+  }, [videoOpen])
+
   return (
     <div className="min-h-screen bg-[linear-gradient(160deg,#def2c3_0%,#d8efba_48%,#cee8ad_100%)] text-foreground">
-      <header className="sticky top-0 z-50 border-b border-white/15 bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-slate-950/70">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <a href="#home" className="flex items-center gap-2 text-sm font-bold tracking-wide text-white sm:text-base">
-            <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" />
-            Ninh Bình Explorer
+      <header className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-slate-950/95 shadow-md shadow-black/20 backdrop-blur-md border-b border-slate-800'
+          : 'bg-slate-950/85 backdrop-blur-sm border-b border-slate-800/60'
+      }`}>
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+
+          {/* Logo */}
+          <a href="#home" className="group flex items-center gap-2 cursor-pointer">
+            <Landmark className="h-5 w-5 text-emerald-400 transition-colors duration-150 group-hover:text-emerald-300" />
+            <span className="text-base font-semibold text-white tracking-wide">
+              Ninh Bình
+            </span>
           </a>
+
+          {/* Desktop nav */}
           <nav className="hidden items-center gap-1 md:flex">
             {navItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="rounded-md px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+                className="px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors duration-150 cursor-pointer rounded-md hover:bg-slate-800"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150 md:hidden cursor-pointer"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? 'Đóng menu' : 'Mở menu'}
+          >
+            {menuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Mobile dropdown */}
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <nav className="border-t border-slate-800 bg-slate-950 px-3 py-2">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="flex items-center rounded-md px-3 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150 cursor-pointer"
+                onClick={() => setMenuOpen(false)}
               >
                 {item.label}
               </a>
@@ -234,8 +314,9 @@ function App() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild className="bg-emerald-600 text-white hover:bg-emerald-700">
-              <a href="https://youtu.be/Gvu5Bqi5Mqc?si=dUdi813aq2BckMN2" target="_blank" rel="noopener noreferrer">Khám phá ngay</a>
+            <Button className="bg-emerald-600 text-white hover:bg-emerald-700" onClick={() => setVideoOpen(true)}>
+              <PlayCircle className="mr-2 h-4 w-4" />
+              Khám phá ngay
             </Button>
             <Button asChild variant="outline" className="border-white/50 bg-white/10 text-white hover:bg-white/20 hover:text-white">
               <a href="#history">Xem lịch sử</a>
@@ -665,6 +746,35 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Video Dialog */}
+      {videoOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setVideoOpen(false)}
+              className="absolute -top-10 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/40"
+              aria-label="Đóng"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <video
+              ref={videoRef}
+              src="/video/video.mp4"
+              controls
+              autoPlay
+              className="w-full rounded-lg shadow-2xl"
+              style={{ maxHeight: '80vh' }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
